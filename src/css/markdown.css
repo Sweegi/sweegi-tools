@@ -123,4 +123,32 @@
   margin: 24px 0;
   background-color: #e1e4e8;
   border: 0;
+}
+
+/* Mermaid图表样式 */
+.markdown-body .mermaid {
+  text-align: center;
+  margin: 20px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  overflow: auto;
+}
+
+.markdown-body .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.markdown-body .mermaid-error {
+  color: #d73a49;
+  background-color: #ffeef0;
+  border: 1px solid #f97583;
+  border-radius: 6px;
+  padding: 16px;
+  font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 14px;
+  line-height: 1.45;
+  white-space: pre-wrap;
 } 

@@ -19,14 +19,14 @@ const routes = [
         path: 'html-to-pdf',
         name: 'HtmlToPdf',
         component: () => import('@/views/HtmlToPdf.vue')
+      },
+      {
+        path: '/viewer',
+        name: 'Viewer',
+        component: () => import('@/views/Viewer.vue')
       }
     ]
   },
-  {
-    path: '/viewer',
-    name: 'Viewer',
-    component: () => import('@/views/Viewer.vue')
-  }
 ]
 
 const router = createRouter({
