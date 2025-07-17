@@ -14,7 +14,6 @@
             type="primary" 
             size="large" 
             @click="goToMarkdownViewer"
-            icon="Document"
           >
             开始使用 Markdown查看器
           </el-button>
@@ -22,7 +21,6 @@
             type="success" 
             size="large" 
             @click="goToHtmlToPdf"
-            icon="Printer"
           >
             开始使用 HTML转PDF
           </el-button>

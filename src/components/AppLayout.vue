@@ -1,11 +1,11 @@
 <template>
   <div class="app-layout h-full flex flex-col">
     <!-- 顶部菜单 -->
-    <header class="bg-gray-900 shadow-lg border-b border-gray-700 h-16 md:h-20">
+    <header class="bg-gray-900 shadow-lg border-b border-gray-700 h-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
         <div class="flex items-center justify-between h-full">
           <!-- Logo -->
-          <router-link to="/" class="text-xl md:text-2xl font-bold text-white hover:text-pink-400 transition-colors">
+          <router-link to="/" class="text-xl md:text-2xl no-underline font-bold text-white hover:text-pink-400 transition-colors">
             Sweegi Tools
           </router-link>
 

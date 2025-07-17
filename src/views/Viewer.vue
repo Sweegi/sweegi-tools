@@ -2,7 +2,9 @@
   <div class="viewer-container h-full flex flex-col">
     <header class="bg-white border-b border-gray-200 p-4 flex items-center justify-between shadow-sm">
       <div class="flex items-center">
-        <el-button @click="goBack" icon="ArrowLeft" circle />
+        <el-button @click="goBack" circle>
+          <el-icon><ArrowLeft /></el-icon>
+        </el-button>
         <h1 class="ml-4 text-xl font-medium">{{ currentFile?.name || '未命名文档' }}</h1>
       </div>
       <div>

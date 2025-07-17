@@ -26,8 +26,8 @@
                 size="large"
                 @click="selectHtmlFile"
                 class="w-full"
-                icon="FolderOpened"
                 :loading="isConverting">
+                <el-icon class="mr-1"><FolderOpened /></el-icon>
                 选择 HTML 文件
               </el-button>
               <div v-if="selectedFile" class="text-sm text-gray-600">
@@ -382,7 +382,7 @@ const preprocessHtmlContent = (content) => {
     .achievements li,
     .skill-list li,
     .certifications-list li {
-      border-bottom-color: #ddd !important;/
+      border-bottom-color: #ddd !important;
     }
 
     /* 禁用动画避免Canvas渲染问题 */

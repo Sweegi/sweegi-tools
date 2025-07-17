@@ -16,8 +16,8 @@
           size="large" 
           @click="openFile"
           class="mb-4"
-          icon="FolderOpened"
         >
+          <el-icon class="mr-1"><FolderOpened /></el-icon>
           选择 Markdown 文件
         </el-button>
         
