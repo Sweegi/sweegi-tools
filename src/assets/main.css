@@ -32,4 +32,46 @@ html, body {
 
 #app {
   height: 100%;
+}
+
+/* 强制深色主题样式 - 全局覆盖 */
+.el-menu--horizontal {
+  background-color: #111827 !important;
+  border-bottom: none !important;
+}
+
+.el-menu-item {
+  background-color: #111827 !important;
+  color: #d1d5db !important;
+  border-bottom: 2px solid transparent !important;
+}
+
+.el-menu-item:hover {
+  background-color: #1f2937 !important;
+  color: #ec4899 !important;
+}
+
+.el-menu-item.is-active {
+  background-color: #1f2937 !important;
+  color: #ec4899 !important;
+  border-bottom-color: #ec4899 !important;
+}
+
+/* 移动端深色主题强化 */
+@media (max-width: 768px) {
+  .bg-gray-900 {
+    background-color: #111827 !important;
+  }
+
+  .bg-gray-800 {
+    background-color: #1f2937 !important;
+  }
+
+  .text-white {
+    color: #ffffff !important;
+  }
+
+  .text-gray-300 {
+    color: #d1d5db !important;
+  }
 } 
