@@ -31,7 +31,7 @@ import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
 import { ArrowLeft } from '@element-plus/icons-vue'
-import './markdown.css'
+import '../css/markdown.css'
 
 const router = useRouter()
 const currentFile = ref(null)
