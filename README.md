@@ -79,7 +79,7 @@ make install    # 安装依赖
 make dev        # 启动开发服务器
 
 # 生产构建
-make build      # 构建并生成压缩包
+make build      # 构建并生成压缩包（支持离线访问）
 ```
 
 ## 可用的 Make 命令

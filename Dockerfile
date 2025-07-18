@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:20.19.4-alpine3.22
 
 WORKDIR /app
 
@@ -21,4 +21,4 @@ COPY . .
 EXPOSE 5173
 
 # 默认命令
-CMD ["npm", "run", "dev"] 
+CMD ["npm", "run", "dev"]
