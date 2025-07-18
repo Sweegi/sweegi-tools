@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 
 const routes = [
   {
@@ -11,26 +11,27 @@ const routes = [
         component: () => import('@/views/Home.vue')
       },
       {
-        path: 'markdown-viewer',
+        path: 'markdown',
         name: 'MarkdownViewer',
-        component: () => import('@/views/MarkdownViewer.vue')
+        component: () => import('@/views/MarkdownViewer.vue'),
+      },
+      {
+        path: 'markdown/viewer',
+        name: 'Viewer',
+        component: () => import('@/views/Viewer.vue')
       },
       {
         path: 'html-to-pdf',
         name: 'HtmlToPdf',
         component: () => import('@/views/HtmlToPdf.vue')
       },
-      {
-        path: '/viewer',
-        name: 'Viewer',
-        component: () => import('@/views/Viewer.vue')
-      }
     ]
   },
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  // history: createWebHistory(),
+  history: createWebHashHistory(),
   routes
 })
 

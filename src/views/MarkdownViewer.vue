@@ -83,7 +83,7 @@ const openFile = async () => {
     
     // 导航到查看器页面
     localStorage.setItem('currentFile', JSON.stringify(fileInfo))
-    router.push('/viewer')
+    router.push('/markdown/viewer')
   } catch (error) {
     console.error('打开文件失败', error)
   }

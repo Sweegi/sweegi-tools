@@ -20,7 +20,7 @@
             @select="handleSelect"
             :ellipsis="false"
           >
-            <el-menu-item index="markdown-viewer" class="menu-item-custom">
+            <el-menu-item index="markdown" class="menu-item-custom">
               <el-icon class="mr-2"><Document /></el-icon>
               Markdown查看器
             </el-menu-item>
@@ -51,10 +51,10 @@
       >
         <div class="px-4 py-2 space-y-1">
           <a
-            @click="handleMobileMenuSelect('markdown-viewer')"
+            @click="handleMobileMenuSelect('markdown')"
             :class="[
               'flex items-center px-3 py-3 rounded-md text-base font-medium transition-colors cursor-pointer',
-              activeIndex === 'markdown-viewer'
+              activeIndex === 'markdown'
                 ? 'bg-gray-700 text-pink-400'
                 : 'text-gray-300 hover:bg-gray-700 hover:text-white'
             ]"
@@ -99,8 +99,8 @@ const mobileMenuOpen = ref(false)
 // 根据当前路由设置活跃菜单项
 const activeIndex = computed(() => {
   const path = route.path
-  if (path === '/markdown-viewer') return 'markdown-viewer'
-  if (path === '/html-to-pdf') return 'html-to-pdf'
+  if (path.startsWith('/markdown')) return 'markdown'
+  if (path.startsWith('/html-to-pdf')) return 'html-to-pdf'
   return ''
 })
 

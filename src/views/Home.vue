@@ -37,7 +37,7 @@ import { Document, Printer } from '@element-plus/icons-vue'
 const router = useRouter()
 
 const goToMarkdownViewer = () => {
-  router.push('/markdown-viewer')
+  router.push('/markdown')
 }
 
 const goToHtmlToPdf = () => {
