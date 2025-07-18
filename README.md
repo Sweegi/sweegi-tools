@@ -85,7 +85,7 @@ make build      # 构建并生成压缩包（支持离线访问）
 ## 可用的 Make 命令
 
 ```bash
-make docker      # 拉取 node:18-alpine Docker 镜像
+make docker      # 拉取 node:20.19.4-alpine3.22 Docker 镜像
 make install     # 使用 Docker 安装 npm 依赖
 make dev         # 启动开发服务器 (localhost:5173)
 make build       # 构建生产版本并生成日期命名的 zip 包
@@ -112,7 +112,7 @@ make build       # 构建生产版本并生成日期命名的 zip 包
 - **代码高亮**: Highlight.js
 - **PDF 生成**: jsPDF + html2canvas
 - **文件处理**: browser-fs-access
-- **容器化**: Docker (node:18-alpine)
+- **容器化**: Docker (node:20.19.4-alpine3.22)
 
 ## 许可证
 
