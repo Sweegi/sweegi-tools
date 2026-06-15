@@ -7,13 +7,21 @@
         </el-button>
         <h1 class="ml-4 text-xl font-medium">{{ currentFile?.name || '未命名文档' }}</h1>
       </div>
-      <div>
+      <div class="flex items-center gap-2">
+        <el-button @click="refreshFile" :disabled="!currentFile" :loading="refreshing">
+          <el-icon class="mr-1"><Refresh /></el-icon>
+          刷新
+        </el-button>
+        <el-button @click="printPreview" :disabled="!renderedContent">
+          <el-icon class="mr-1"><Printer /></el-icon>
+          打印
+        </el-button>
         <el-button @click="openFile" type="primary">打开其他文件</el-button>
       </div>
     </header>
 
     <main class="flex-grow overflow-auto p-4 bg-gray-50">
-      <div v-if="renderedContent" class="markdown-body bg-white p-8 max-w-4xl mx-auto rounded-lg shadow">
+      <div v-if="renderedContent" class="markdown-body markdown-preview bg-white p-8 max-w-4xl mx-auto rounded-lg shadow">
         <div v-html="renderedContent"></div>
       </div>
       <div v-else class="text-center p-8">
@@ -30,13 +38,17 @@ import { fileOpen } from 'browser-fs-access'
 import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
-import { ArrowLeft } from '@element-plus/icons-vue'
+import { ArrowLeft, Printer, Refresh } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+import { saveCurrentFileHandle, loadCurrentFileHandle } from '@/utils/fileHandleStorage'
 import mermaid from 'mermaid'
 import '../css/markdown.css'
 
 const router = useRouter()
 const currentFile = ref(null)
 const markdownContent = ref('')
+const fileHandle = ref(null)
+const refreshing = ref(false)
 
 // 初始化 Mermaid
 console.log('开始初始化Mermaid...')
@@ -174,8 +186,9 @@ const renderMermaidCharts = async () => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   loadCurrentFile()
+  fileHandle.value = await loadCurrentFileHandle()
 })
 
 const loadCurrentFile = () => {
@@ -190,46 +203,140 @@ const loadCurrentFile = () => {
   }
 }
 
+const isFilePickerCancelled = (error) => !error || error.name === 'AbortError'
+
+const pickMarkdownFile = () =>
+  fileOpen({
+    extensions: ['.md', '.markdown'],
+    description: 'Markdown文件'
+  })
+
+const applyOpenedFile = async (file, { successMessage } = {}) => {
+  const fileInfo = {
+    name: file.name,
+    size: file.size,
+    lastModified: file.lastModified,
+    content: await file.text()
+  }
+
+  currentFile.value = fileInfo
+  markdownContent.value = fileInfo.content
+
+  const recentFiles = JSON.parse(localStorage.getItem('recentFiles') || '[]')
+  const existingIndex = recentFiles.findIndex(f => f.name === fileInfo.name)
+  if (existingIndex > -1) {
+    recentFiles.splice(existingIndex, 1)
+  }
+  recentFiles.unshift({
+    name: fileInfo.name,
+    lastModified: fileInfo.lastModified
+  })
+  if (recentFiles.length > 10) {
+    recentFiles.length = 10
+  }
+
+  localStorage.setItem('recentFiles', JSON.stringify(recentFiles))
+  localStorage.setItem('currentFile', JSON.stringify(fileInfo))
+  fileHandle.value = file.handle ?? null
+  await saveCurrentFileHandle(file.handle)
+
+  if (successMessage) {
+    ElMessage.success(successMessage)
+  }
+}
+
 const openFile = async () => {
   try {
-    const file = await fileOpen({
-      extensions: ['.md', '.markdown'],
-      description: 'Markdown文件'
-    })
-
-    const fileInfo = { 
-      name: file.name, 
-      size: file.size,
-      lastModified: file.lastModified,
-      content: await file.text()
-    }
-
-    // 更新当前文件
-    currentFile.value = fileInfo
-    markdownContent.value = fileInfo.content
-
-    // 添加到最近文件
-    const recentFiles = JSON.parse(localStorage.getItem('recentFiles') || '[]')
-    const existingIndex = recentFiles.findIndex(f => f.name === fileInfo.name)
-    if (existingIndex > -1) {
-      recentFiles.splice(existingIndex, 1)
-    }
-    recentFiles.unshift({
-      name: fileInfo.name,
-      lastModified: fileInfo.lastModified
-    })
-    if (recentFiles.length > 10) {
-      recentFiles.length = 10
-    }
-
-    localStorage.setItem('recentFiles', JSON.stringify(recentFiles))
-    localStorage.setItem('currentFile', JSON.stringify(fileInfo))
+    const file = await pickMarkdownFile()
+    await applyOpenedFile(file)
   } catch (error) {
-    console.error('打开文件失败', error)
+    if (!isFilePickerCancelled(error)) {
+      console.error('打开文件失败', error)
+      ElMessage.error('打开文件失败')
+    }
   }
 }
 
 const goBack = () => {
   router.push('/')
 }
-</script> 
+
+const refreshFile = async () => {
+  if (refreshing.value || !currentFile.value) return
+
+  refreshing.value = true
+  try {
+    const handle = fileHandle.value ?? await loadCurrentFileHandle()
+    if (handle) {
+      try {
+        let permission = await handle.queryPermission({ mode: 'read' })
+        if (permission !== 'granted') {
+          permission = await handle.requestPermission({ mode: 'read' })
+        }
+        if (permission === 'granted') {
+          const file = await handle.getFile()
+          await applyOpenedFile(file, { successMessage: '文件已刷新' })
+          return
+        }
+      } catch (error) {
+        console.warn('通过文件句柄刷新失败，改为选择文件', error)
+      }
+    }
+
+    const file = await pickMarkdownFile()
+    await applyOpenedFile(file, { successMessage: '文件已刷新' })
+  } catch (error) {
+    if (!isFilePickerCancelled(error)) {
+      console.error('刷新文件失败', error)
+      ElMessage.error('刷新文件失败')
+    }
+  } finally {
+    refreshing.value = false
+  }
+}
+
+const printPreview = () => {
+  if (!renderedContent.value) return
+  window.print()
+}
+</script>
+
+<style>
+@media print {
+  .app-layout > header,
+  .viewer-container > header {
+    display: none !important;
+  }
+
+  .app-layout,
+  .app-layout > .flex-grow,
+  .viewer-container,
+  .viewer-container main {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    background: #fff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .markdown-preview {
+    box-shadow: none !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .markdown-preview pre,
+  .markdown-preview code {
+    white-space: pre-wrap !important;
+    word-break: break-word;
+  }
+
+  .markdown-preview svg {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+</style> 

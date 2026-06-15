@@ -51,6 +51,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { Document, FolderOpened, ArrowRight } from '@element-plus/icons-vue'
 import { fileOpen } from 'browser-fs-access'
+import { saveCurrentFileHandle } from '@/utils/fileHandleStorage'
 
 const router = useRouter()
 const recentFiles = ref([])
@@ -83,6 +84,7 @@ const openFile = async () => {
     
     // 导航到查看器页面
     localStorage.setItem('currentFile', JSON.stringify(fileInfo))
+    await saveCurrentFileHandle(file.handle)
     router.push('/markdown/viewer')
   } catch (error) {
     console.error('打开文件失败', error)
