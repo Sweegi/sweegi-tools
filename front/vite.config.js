@@ -25,7 +25,7 @@ export default defineConfig(() => {
     },
     server: {
       host: '0.0.0.0',
-      port: 5173,
+      port: 5174,
     },
     // 报表项目打包时 @vitejs/plugin-legacy插件生成的script路径不正确，由这个配置来解决
     // 会将生成的script标签的src值由 '../../xxx/xxx' 改成 'xxx/xxx',

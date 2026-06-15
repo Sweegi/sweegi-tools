@@ -18,7 +18,7 @@ RUN npm install
 COPY . .
 
 # 暴露端口
-EXPOSE 5173
+EXPOSE 5174
 
 # 默认命令
 CMD ["npm", "run", "dev"]

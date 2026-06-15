@@ -36,7 +36,7 @@ make install
 make dev
 ```
 
-开发服务器将在 http://localhost:5173 上运行。
+开发服务器将在 http://localhost:5174 上运行。
 
 ## 构建部署
 
@@ -87,14 +87,14 @@ make build      # 构建并生成压缩包（支持离线访问）
 ```bash
 make docker      # 拉取 node:20.19.4-alpine3.22 Docker 镜像
 make install     # 使用 Docker 安装 npm 依赖
-make dev         # 启动开发服务器 (localhost:5173)
+make dev         # 启动开发服务器 (localhost:5174)
 make build       # 构建生产版本并生成日期命名的 zip 包
 ```
 
 ## 常见问题
 
 ### 端口被占用
-如果 5173 端口被占用，Docker 开发命令会自动失败。请先停止占用该端口的进程。
+如果 5174 端口被占用，Docker 开发命令会自动失败。请先停止占用该端口的进程。
 
 
 ### 构建文件位置
