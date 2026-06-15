@@ -1,4 +1,4 @@
-.PHONY: help dev build run clean docker-build docker-run docker-stop shell
+.PHONY: help dev build rebuild run clean docker-build docker-run docker-stop shell
 
 # Docker镜像名称
 IMAGE_NAME = sweegi-tools-backend
@@ -9,8 +9,9 @@ PORT ?= 5001
 
 help:
 	@echo "可用命令:"
-	@echo "  make dev        - 构建并启动开发环境容器"
-	@echo "  make build      - 构建Docker镜像"
+	@echo "  make dev        - 启动开发环境容器（复用已有镜像/容器）"
+	@echo "  make build      - 构建Docker镜像（镜像不存在时 dev/run 会自动执行）"
+	@echo "  make rebuild    - 强制重新构建Docker镜像"
 	@echo "  make run        - 运行开发容器（默认端口5001）"
 	@echo "  make stop       - 停止开发容器"
 	@echo "  make clean      - 清理容器和镜像"
@@ -22,14 +23,20 @@ help:
 	@echo "  自定义端口: make run PORT=5002"
 	@echo "  使用5000端口: make run PORT=5000（需先释放5000端口）"
 
-dev: build run
+dev: run
 
 build:
 	@echo "构建Docker镜像..."
 	docker build -t $(IMAGE_NAME):latest .
 	@echo "镜像构建完成"
 
+rebuild: build
+
 run:
+	@if ! docker image inspect $(IMAGE_NAME):latest >/dev/null 2>&1; then \
+		echo "镜像不存在，正在首次构建..."; \
+		$(MAKE) build; \
+	fi
 	@echo "启动开发容器（端口: $(PORT):5000）..."
 	@docker ps -a | grep $(CONTAINER_NAME) > /dev/null && \
 		echo "容器已存在，正在启动..." && \
